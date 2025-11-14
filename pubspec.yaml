@@ -1,0 +1,29 @@
+name: ai_stetho_final
+description: AI Stethoscope Kids - Hackathon Winner 2025
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  permission_handler: ^11.3.1
+  record: ^6.1.2
+  record_linux: 1.2.1
+  path_provider: ^2.1.2
+  fl_chart: ^0.68.0
+  pdf: ^3.10.8
+  share_plus: ^7.2.2
+  google_fonts: ^6.1.0
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # Linting
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true

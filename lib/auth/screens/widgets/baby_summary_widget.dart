@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class BabySummaryScreen extends StatelessWidget {
   final String name, age, weight, gender, parent;
@@ -42,7 +41,7 @@ class BabySummaryScreen extends StatelessWidget {
                   const SizedBox(height: 15),
                   Text(
                     "Baby Summary",
-                    style: GoogleFonts.poppins(
+                    style: TextStyle(
                       fontSize: 30,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -79,7 +78,7 @@ class BabySummaryScreen extends StatelessWidget {
                               ),
                               child: Text(
                                 "Start Pain Detection",
-                                style: GoogleFonts.poppins(
+                                style: TextStyle(
                                   fontSize: 18,
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
@@ -105,7 +104,7 @@ class BabySummaryScreen extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 12),
       child: Text(
         "$title: $value",
-        style: GoogleFonts.poppins(
+        style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.w600,
         ),

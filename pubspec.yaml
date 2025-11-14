@@ -15,7 +15,9 @@ dependencies:
   fl_chart: ^0.68.0
   pdf: ^3.10.8
   share_plus: ^7.2.2
-  google_fonts: ^6.1.0
+  tflite_flutter: ^0.12.1
+  logger:
+  fftea: ^1.5.0+1
   shared_preferences: ^2.5.3
   uuid: ^4.5.2
 
@@ -29,3 +31,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/repository_sound_model.tflite

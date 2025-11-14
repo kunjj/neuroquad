@@ -1,9 +1,8 @@
 import 'package:ai_stetho_final/auth/screens/widgets/custom_textfiled.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../../home/dash_board_screen.dart';
 import '../../services/auth_service.dart';
 import '../../services/baby_info_service.dart';
+import '../../shishuvani/shishuvani.dart';
 import '../../utils/app_color.dart';
 import 'add_baby_info_screen.dart';
 import 'signup_screen.dart';
@@ -42,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   // HEADER
                   Text(
                     "Welcome Back!",
-                    style: GoogleFonts.poppins(
+                    style: TextStyle(
                       fontSize: 34,
                       color: AppColors.cardColor,
                       fontWeight: FontWeight.bold,
@@ -51,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 10),
                   Text(
                     "Login to continue",
-                    style: GoogleFonts.poppins(
+                    style: TextStyle(
                       fontSize: 16,
                       color: AppColors.cardColor.withOpacity(0.9),
                     ),
@@ -130,16 +129,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                     Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (_) => const StethoScreen()),
+                                          builder: (_) => const ShishuVaniScreen()),
                                     );
                                   } else {
-                                    // No baby → go to Add Baby Page
-                                    Navigator.pushReplacement(
+                                    Navigator.pushAndRemoveUntil(
                                       context,
                                       MaterialPageRoute(
                                           builder: (_) =>
                                               const AddBabyInfoScreen(
-                                                  screenName: '')),
+                                                  screenName: '')),(route) => false,
                                     );
                                   }
                                 } else {
@@ -159,7 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               child: Text(
                                 "Login",
-                                style: GoogleFonts.poppins(
+                                style: TextStyle(
                                   fontSize: 18,
                                   color: AppColors.cardColor,
                                   fontWeight: FontWeight.w600,
@@ -170,28 +168,27 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           const SizedBox(height: 15),
 
-                          // SIGNUP
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
                                 "Don't have an account? ",
-                                style: GoogleFonts.poppins(
+                                style: TextStyle(
                                   fontSize: 14,
                                   color: AppColors.textColorSecondary,
                                 ),
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.push(
+                                  Navigator.pushAndRemoveUntil(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (_) => const SignUpScreen()),
+                                        builder: (_) => const SignUpScreen()),(route) => false,
                                   );
                                 },
                                 child: Text(
                                   "Sign Up",
-                                  style: GoogleFonts.poppins(
+                                  style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.primaryColor,

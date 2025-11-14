@@ -1,9 +1,10 @@
 import 'package:ai_stetho_final/services/baby_info_service.dart';
+import 'package:ai_stetho_final/shishuvani/shishuvani.dart';
+import 'package:ai_stetho_final/utils/app_color.dart';
 import 'package:flutter/material.dart';
 import 'auth/screens/add_baby_info_screen.dart';
 import 'services/auth_service.dart';
 import 'auth/screens/login_screen.dart';
-import 'home/dash_board_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,7 +58,7 @@ class MyApp extends StatelessWidget {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)), // More rounded
           )),
       home: logged
-          ? (hasChildren ? const StethoScreen() : const AddBabyInfoScreen(screenName:''))
+          ? (hasChildren ? const ShishuVaniScreen() : const AddBabyInfoScreen(screenName:''))
           : const LoginScreen(),
     );
   }

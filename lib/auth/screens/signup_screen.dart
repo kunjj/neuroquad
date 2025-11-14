@@ -1,10 +1,10 @@
 import 'package:ai_stetho_final/auth/screens/add_baby_info_screen.dart';
 import 'package:ai_stetho_final/auth/screens/widgets/custom_textfiled.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../../home/dash_board_screen.dart';
+
 import '../../services/auth_service.dart';
 import '../../services/baby_info_service.dart';
+import '../../shishuvani/shishuvani.dart';
 import '../../utils/app_color.dart';
 import 'login_screen.dart';
 
@@ -51,7 +51,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   // HEADER
                   Text(
                     "Create an Account",
-                    style: GoogleFonts.poppins(
+                    style: TextStyle(
                       fontSize: 34,
                       color: AppColors.cardColor,
                       fontWeight: FontWeight.bold,
@@ -61,7 +61,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                   Text(
                     "Register to continue",
-                    style: GoogleFonts.poppins(
+                    style: TextStyle(
                       fontSize: 16,
                       color: AppColors.cardColor.withOpacity(0.9),
                     ),
@@ -103,8 +103,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               label: "Email",
                               icon: Icons.email,
                               keyboardType: TextInputType.emailAddress,
-                              validator: (v) =>
-                                  v!.isEmpty ? "Email required" : null,
+                              validator: (v) => v!.isEmpty ? "Email required" : null,
                             ),
 
                             const SizedBox(height: 20),
@@ -117,8 +116,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               maxLength: 10,
                               validator: (v) {
                                 if (v == null || v.isEmpty) return "Required";
-                                if (v.length != 10)
-                                  return "Enter valid 10-digit mobile number";
+                                if (v.length != 10) return "Enter valid 10-digit mobile number";
                                 return null;
                               },
                             ),
@@ -127,21 +125,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                             // GENDER DROPDOWN
                             Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 12),
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
                               decoration: BoxDecoration(
                                 color: AppColors.cardColor,
                                 borderRadius: BorderRadius.circular(15),
-                                border: Border.all(
-                                    color: AppColors.textColorSecondary
-                                        .withOpacity(0.3)),
+                                border: Border.all(color: AppColors.textColorSecondary.withOpacity(0.3)),
                               ),
                               child: DropdownButtonFormField<String>(
                                 value: selectedGender,
-                                decoration: const InputDecoration(
-                                    border: InputBorder.none),
+                                decoration: const InputDecoration(border: InputBorder.none),
                                 hint: Text("Select Gender",
-                                    style: GoogleFonts.poppins(
+                                    style: TextStyle(
                                       color: AppColors.textColorPrimary,
                                     )),
                                 items: ["Male", "Female", "Other"]
@@ -152,10 +146,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       ),
                                     )
                                     .toList(),
-                                onChanged: (value) =>
-                                    setState(() => selectedGender = value),
-                                validator: (v) =>
-                                    v == null ? "Select gender" : null,
+                                onChanged: (value) => setState(() => selectedGender = value),
+                                validator: (v) => v == null ? "Select gender" : null,
                               ),
                             ),
 
@@ -165,10 +157,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               label: "Password",
                               icon: Icons.lock,
                               obscure: hidePass,
-                              onToggle: () =>
-                                  setState(() => hidePass = !hidePass),
-                              validator: (v) =>
-                                  v!.isEmpty ? "Password required" : null,
+                              onToggle: () => setState(() => hidePass = !hidePass),
+                              validator: (v) => v!.isEmpty ? "Password required" : null,
                             ),
 
                             const SizedBox(height: 20),
@@ -178,12 +168,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               label: "Confirm Password",
                               icon: Icons.lock,
                               obscure: hideConfirmPass,
-                              onToggle: () => setState(
-                                  () => hideConfirmPass = !hideConfirmPass),
+                              onToggle: () => setState(() => hideConfirmPass = !hideConfirmPass),
                               validator: (v) {
                                 if (v!.isEmpty) return "Confirm password";
-                                if (v != passCtrl.text)
-                                  return "Passwords do not match";
+                                if (v != passCtrl.text) return "Passwords do not match";
                                 return null;
                               },
                             ),
@@ -197,15 +185,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 onPressed: _onSignUpPressed,
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.primaryColor,
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 14),
+                                  padding: const EdgeInsets.symmetric(vertical: 14),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(14),
                                   ),
                                 ),
                                 child: Text(
                                   "Sign Up",
-                                  style: GoogleFonts.poppins(
+                                  style: TextStyle(
                                     fontSize: 18,
                                     color: AppColors.cardColor,
                                     fontWeight: FontWeight.w600,
@@ -222,7 +209,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               children: [
                                 Text(
                                   "Already have an account? ",
-                                  style: GoogleFonts.poppins(
+                                  style: TextStyle(
                                     color: AppColors.textColorPrimary,
                                   ),
                                 ),
@@ -237,7 +224,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   },
                                   child: Text(
                                     "Login",
-                                    style: GoogleFonts.poppins(
+                                    style: TextStyle(
                                       color: AppColors.primaryColor,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -295,13 +282,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
       if (children.isNotEmpty) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const StethoScreen()),
+          MaterialPageRoute(builder: (_) => const ShishuVaniScreen()),
         );
       } else {
-        // No child stored → go to Add Baby Info screen
+        // No child_info stored → go to Add Baby Info screen
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const AddBabyInfoScreen(screenName:'')),
+          MaterialPageRoute(builder: (_) => const AddBabyInfoScreen(screenName: '')),
         );
       }
     }

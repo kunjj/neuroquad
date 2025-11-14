@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:ai_stetho_final/utils/colors.dart';
@@ -140,9 +139,7 @@ class _ShishuVaniScreenState extends State<ShishuVaniScreen> with SingleTickerPr
     final pdf = pw.Document();
 
     // Convert Flutter Color to PdfColor
-    PdfColor toPdfColor(Color color) {
-      return PdfColor.fromInt(color.value);
-    }
+    PdfColor toPdfColor(Color color) => PdfColor.fromInt(color.value);
 
     pdf.addPage(pw.Page(
         build: (pw.Context ctx) => pw.Center(
@@ -237,12 +234,13 @@ class _ShishuVaniScreenState extends State<ShishuVaniScreen> with SingleTickerPr
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("ShishuVani-AI Stethoscope", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 22) // Bolder, larger title
+        title: Text("ShishuVani-AI Stethoscope",
+            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 22) // Bolder, larger title
             ),
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 18.0),
-            child: Icon(Icons.info_outline, color: AppColors.cardColor), // Info icon
+            child: Icon(Icons.account_circle_outlined, color: AppColors.cardColor), // Info icon
           ),
         ],
       ),
@@ -341,7 +339,7 @@ class _ShishuVaniScreenState extends State<ShishuVaniScreen> with SingleTickerPr
                           style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: AppColors.cardColor)),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.successColor,
+                      backgroundColor: AppColors.primaryColor,
                       // Pleasant green for CTA
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       // Slightly less rounded than main button

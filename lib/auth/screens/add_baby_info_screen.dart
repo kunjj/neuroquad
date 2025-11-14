@@ -1,13 +1,12 @@
-import 'package:ai_stetho_final/auth/screens/widgets/baby_summary_widget.dart';
+import 'package:ai_stetho_final/shishuvani/shishuvani.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-import '../../home/dash_board_screen.dart';
 import '../../services/baby_info_service.dart';
 import '../../utils/app_color.dart';
 
 class AddBabyInfoScreen extends StatefulWidget {
   final String screenName;
+
   const AddBabyInfoScreen({super.key, required this.screenName});
 
   @override
@@ -80,16 +79,13 @@ class _AddBabyInfoScreenState extends State<AddBabyInfoScreen> {
                         Align(
                           alignment: Alignment.centerRight,
                           child: TextButton(
-                            onPressed: () {
-                              Navigator.pushReplacement(
+                            onPressed: () => Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (_) => const StethoScreen()),
-                              );
-                            },
+                                MaterialPageRoute(builder: (_) => const ShishuVaniScreen()),
+                              ),
                             child: Text(
                               "Skip",
-                              style: GoogleFonts.poppins(
+                              style: TextStyle(
                                 fontSize: 16,
                                 color: AppColors.cardColor,
                                 fontWeight: FontWeight.w600,
@@ -105,7 +101,7 @@ class _AddBabyInfoScreenState extends State<AddBabyInfoScreen> {
                   Center(
                     child: Text(
                       "Baby Information",
-                      style: GoogleFonts.poppins(
+                      style: TextStyle(
                         fontSize: 30,
                         color: AppColors.cardColor,
                         fontWeight: FontWeight.bold,
@@ -118,7 +114,7 @@ class _AddBabyInfoScreenState extends State<AddBabyInfoScreen> {
                   Center(
                     child: Text(
                       "Please fill the details below",
-                      style: GoogleFonts.poppins(
+                      style: TextStyle(
                         color: AppColors.cardColor.withOpacity(0.9),
                         fontSize: 15,
                       ),
@@ -148,7 +144,7 @@ class _AddBabyInfoScreenState extends State<AddBabyInfoScreen> {
                         children: [
                           Text(
                             "Enter Baby Details",
-                            style: GoogleFonts.poppins(
+                            style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w600,
                               color: AppColors.primaryColor,
@@ -209,7 +205,7 @@ class _AddBabyInfoScreenState extends State<AddBabyInfoScreen> {
                             alignment: Alignment.centerLeft,
                             child: Text(
                               "Gender",
-                              style: GoogleFonts.poppins(
+                              style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                                 color: AppColors.textColorPrimary,
@@ -243,17 +239,15 @@ class _AddBabyInfoScreenState extends State<AddBabyInfoScreen> {
                                     parent: parentController.text.trim(),
                                   );
 
-                                  Navigator.pushReplacement(
+                                  Navigator.push(
                                     context,
-                                    MaterialPageRoute(
-                                        builder: (_) => const StethoScreen()),
+                                    MaterialPageRoute(builder: (_) => const ShishuVaniScreen()),
                                   );
                                 }
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.primaryColor,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 15),
+                                padding: const EdgeInsets.symmetric(vertical: 15),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(14),
                                 ),
@@ -261,7 +255,7 @@ class _AddBabyInfoScreenState extends State<AddBabyInfoScreen> {
                               ),
                               child: Text(
                                 "Continue",
-                                style: GoogleFonts.poppins(
+                                style: TextStyle(
                                   fontSize: 18,
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
@@ -304,8 +298,7 @@ class _AddBabyInfoScreenState extends State<AddBabyInfoScreen> {
       ),
 
       // Hide the counter
-      buildCounter: (context,
-          {required currentLength, required maxLength, required isFocused}) {
+      buildCounter: (context, {required currentLength, required maxLength, required isFocused}) {
         return null;
       },
 
@@ -325,8 +318,7 @@ class _AddBabyInfoScreenState extends State<AddBabyInfoScreen> {
         filled: true,
         fillColor: AppColors.cardColor.withOpacity(0.9),
 
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
 
         // Normal border
         enabledBorder: OutlineInputBorder(
@@ -377,14 +369,12 @@ class _AddBabyInfoScreenState extends State<AddBabyInfoScreen> {
         duration: const Duration(milliseconds: 250),
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
         decoration: BoxDecoration(
-          color: selected
-              ? AppColors.primaryColor
-              : AppColors.backgroundColorLight,
+          color: selected ? AppColors.primaryColor : AppColors.backgroundColorLight,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text(
           value,
-          style: GoogleFonts.poppins(
+          style: TextStyle(
             color: selected ? Colors.white : AppColors.textColorPrimary,
             fontWeight: FontWeight.w600,
           ),

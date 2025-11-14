@@ -10,7 +10,9 @@ import 'dart:io';
 import 'dart:math';
 
 import '../auth/screens/login_screen.dart';
+import '../child/child_list_screen.dart';
 import '../services/auth_service.dart';
+import '../utils/app_color.dart';
 
 class StethoScreen extends StatefulWidget {
   const StethoScreen({super.key});
@@ -244,39 +246,6 @@ class _StethoScreenState extends State<StethoScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 30, vertical: 15)),
                 ),
-                const SizedBox(height: 30),
-                ElevatedButton.icon(
-                  onPressed: () async {
-                    await AuthService.logout();
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (_) => const LoginScreen()),
-                      (route) => false,
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.logout,
-                    color: Colors.white,
-                  ),
-                  label: const Text(
-                    'Logout',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.redAccent,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 28, vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 4,
-                    shadowColor: Colors.redAccent.withOpacity(0.4),
-                  ),
-                )
               ],
             ),
           ),

@@ -1,6 +1,6 @@
 import 'package:ai_stetho_final/services/baby_info_service.dart';
 import 'package:flutter/material.dart';
-import 'auth/screens/baby_info_screen.dart';
+import 'auth/screens/add_baby_info_screen.dart';
 import 'services/auth_service.dart';
 import 'auth/screens/login_screen.dart';
 import 'home/dash_board_screen.dart';
@@ -9,26 +9,27 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   bool logged = await AuthService.isLoggedIn();
-  bool babySaved = false;
+  bool hasChildren = false;
 
   if (logged) {
-    babySaved = await BabyService.isBabySaved();
+    final children = await BabyService.getAllChildren();
+    hasChildren = children.isNotEmpty;
   }
 
   runApp(MyApp(
-    logged: logged ?? false,
-    babySaved: babySaved ?? false,
+    logged: logged,
+    hasChildren: hasChildren,
   ));
 }
 
 class MyApp extends StatelessWidget {
   final bool logged;
-  final bool babySaved;
+  final bool hasChildren;
 
   const MyApp({
     super.key,
     required this.logged,
-    required this.babySaved,
+    required this.hasChildren,
   });
 
   @override
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: logged
-          ? (babySaved ? const StethoScreen() : const BabyInfoScreen())
+          ? (hasChildren ? const StethoScreen() : const AddBabyInfoScreen(screenName:''))
           : const LoginScreen(),
     );
   }

@@ -1,4 +1,4 @@
-import 'package:ai_stetho_final/auth/screens/baby_info_screen.dart';
+import 'package:ai_stetho_final/auth/screens/add_baby_info_screen.dart';
 import 'package:ai_stetho_final/auth/screens/widgets/custom_textfiled.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -282,7 +282,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  // SIGN UP ACTION
+// SIGN UP ACTION
   Future<void> _onSignUpPressed() async {
     if (_formKey.currentState!.validate()) {
       await AuthService.saveUser(
@@ -290,17 +290,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
         passCtrl.text.trim(),
       );
 
-      bool isSaved = await BabyService.isBabySaved();
+      final children = await BabyService.getAllChildren();
 
-      if (isSaved) {
+      if (children.isNotEmpty) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => const StethoScreen()),
         );
       } else {
+        // No child stored → go to Add Baby Info screen
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const BabyInfoScreen()),
+          MaterialPageRoute(builder: (_) => const AddBabyInfoScreen(screenName:'')),
         );
       }
     }

@@ -6,14 +6,15 @@ import '../../home/dash_board_screen.dart';
 import '../../services/baby_info_service.dart';
 import '../../utils/app_color.dart';
 
-class BabyInfoScreen extends StatefulWidget {
-  const BabyInfoScreen({super.key});
+class AddBabyInfoScreen extends StatefulWidget {
+  final String screenName;
+  const AddBabyInfoScreen({super.key, required this.screenName});
 
   @override
-  State<BabyInfoScreen> createState() => _BabyInfoScreenState();
+  State<AddBabyInfoScreen> createState() => _AddBabyInfoScreenState();
 }
 
-class _BabyInfoScreenState extends State<BabyInfoScreen> {
+class _AddBabyInfoScreenState extends State<AddBabyInfoScreen> {
   final _formKey = GlobalKey<FormState>();
 
   final nameController = TextEditingController();
@@ -24,12 +25,17 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
   String gender = "Male";
 
   @override
+  void initState() {
+    super.initState();
+    print("Received parentId: ${widget.screenName}");
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundColorLight,
       body: Stack(
         children: [
-          // TOP CURVED BACKGROUND
           Container(
             height: 260,
             decoration: BoxDecoration(
@@ -47,38 +53,55 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
               ),
             ),
           ),
-
           SafeArea(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // ------------------ SKIP BUTTON ------------------
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const StethoScreen()),
-                        );
-                      },
-                      child: Text(
-                        "Skip",
-                        style: GoogleFonts.poppins(
-                          fontSize: 16,
-                          color: AppColors.cardColor,
-                          fontWeight: FontWeight.w600,
+                  Row(
+                    children: [
+                      if (widget.screenName == 'list_screen')
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.arrow_back,
+                              color: AppColors.cardColor,
+                              size: 28,
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
                         ),
-                      ),
-                    ),
+                      Spacer(),
+                      if (widget.screenName == '')
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => const StethoScreen()),
+                              );
+                            },
+                            child: Text(
+                              "Skip",
+                              style: GoogleFonts.poppins(
+                                fontSize: 16,
+                                color: AppColors.cardColor,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
 
                   const SizedBox(height: 10),
 
-                  // ------------------ TITLE ---------------------
                   Center(
                     child: Text(
                       "Baby Information",
@@ -207,18 +230,17 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
 
                           const SizedBox(height: 30),
 
-                          // ---------------- CONTINUE BUTTON -----------------
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  await BabyService.saveBabyData(
-                                    name: nameController.text,
-                                    age: ageController.text,
-                                    weight: weightController.text,
+                                  await BabyService.saveChild(
+                                    name: nameController.text.trim(),
+                                    age: ageController.text.trim(),
+                                    weight: weightController.text.trim(),
                                     gender: gender,
-                                    parent: parentController.text,
+                                    parent: parentController.text.trim(),
                                   );
 
                                   Navigator.pushReplacement(
@@ -235,6 +257,7 @@ class _BabyInfoScreenState extends State<BabyInfoScreen> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(14),
                                 ),
+                                elevation: 6,
                               ),
                               child: Text(
                                 "Continue",

@@ -5,7 +5,7 @@ import '../../home/dash_board_screen.dart';
 import '../../services/auth_service.dart';
 import '../../services/baby_info_service.dart';
 import '../../utils/app_color.dart';
-import 'baby_info_screen.dart';
+import 'add_baby_info_screen.dart';
 import 'signup_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -121,26 +121,31 @@ class _LoginScreenState extends State<LoginScreen> {
                                 );
 
                                 if (ok) {
-                                  bool isSaved =
-                                      await BabyService.isBabySaved();
+                                  // Fetch children
+                                  final children =
+                                      await BabyService.getAllChildren();
 
-                                  if (isSaved) {
+                                  if (children.isNotEmpty) {
+                                    // At least 1 baby exists → go to Dashboard
                                     Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
                                           builder: (_) => const StethoScreen()),
                                     );
                                   } else {
+                                    // No baby → go to Add Baby Page
                                     Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
                                           builder: (_) =>
-                                              const BabyInfoScreen()),
+                                              const AddBabyInfoScreen(
+                                                  screenName: '')),
                                     );
                                   }
                                 } else {
-                                  setState(() =>
-                                      error = "Invalid email or password!");
+                                  setState(() {
+                                    error = "Invalid email or password!";
+                                  });
                                 }
                               },
                               style: ElevatedButton.styleFrom(

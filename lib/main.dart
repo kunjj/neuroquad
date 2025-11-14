@@ -1,7 +1,6 @@
 import 'package:ai_stetho_final/shishuvani.dart';
 import 'package:ai_stetho_final/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 void main() => runApp(const MainEntryPoint());
 
@@ -20,7 +19,6 @@ class _MainEntryPointState extends State<MainEntryPoint> {
       title: 'Shishu Vani',
       theme: ThemeData(
           primarySwatch: Colors.teal,
-          fontFamily: GoogleFonts.poppins().fontFamily,
           scaffoldBackgroundColor: AppColors.backgroundColorLight,
           appBarTheme: const AppBarTheme(
             backgroundColor: AppColors.primaryColor,
@@ -31,7 +29,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-              textStyle: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 16),
+              textStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
             ),
           ),
           cardTheme: CardThemeData(

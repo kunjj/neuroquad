@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:ai_stetho_final/utils/colors.dart';
-import 'package:ai_stetho_final/utils/logging.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -12,7 +11,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:record/record.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
-import 'package:fftea/fftea.dart' as fftea;
 
 const Map<int, String> kRespiratoryLabels = {
   0: 'Asthma',
@@ -86,7 +84,7 @@ class _ShishuVaniScreenState extends State<ShishuVaniScreen> with SingleTickerPr
     final tempDir = await getTemporaryDirectory();
     final path = '${tempDir.path}/temp_recording.pcm';
     await _recorder.start(
-      RecordConfig(encoder: AudioEncoder.pcm16bits, sampleRate: _sampleRate, numChannels: 1),
+      RecordConfig(encoder: AudioEncoder.pcm16bits, sampleRate: sampleRate, numChannels: 1),
       path: path,
     );
     setState(() {
@@ -110,7 +108,6 @@ class _ShishuVaniScreenState extends State<ShishuVaniScreen> with SingleTickerPr
     final int16 = bytes.buffer.asInt16List();
     final floatList = Float32List(int16.length)..setAll(0, int16.map((v) => v / 32768.0));
 
-    final rand = math.Random();
     final lungs = <Map<String, dynamic>>[
       {"text": "Normal Lung Sounds", "conf": "98.7%", "color": AppColors.successColor},
       {"text": "Pneumonia Likely (Crackles + Wheeze)", "conf": "96.3%", "color": AppColors.errorColor},
@@ -124,8 +121,8 @@ class _ShishuVaniScreenState extends State<ShishuVaniScreen> with SingleTickerPr
       {"text": "Pathological Murmur Detected", "conf": "93.4%", "color": AppColors.errorColor},
     ];
 
-    final selectedLung = lungs[rand.nextInt(lungs.length)];
-    final selectedHeart = hearts[rand.nextInt(hearts.length)];
+    final selectedLung = lungs[0];
+    final selectedHeart = hearts[0];
 
     setState(() {
       isRecording = false;
@@ -137,90 +134,6 @@ class _ShishuVaniScreenState extends State<ShishuVaniScreen> with SingleTickerPr
       heartColor = selectedHeart["color"] as Color;
     });
     return floatList;
-  }
-
-  Float32List _windowToMelSpec(Float32List pcm) {
-    // Hann window (precompute once)
-    final hann = Float32List(nFft);
-    for (int i = 0; i < nFft; i++) {
-      hann[i] = 0.5 * (1 - math.cos(2 * math.pi * i / (nFft - 1)));
-    }
-
-    // Pad signal
-    final int frames = 1 + (pcm.length - nFft) ~/ hopLength;
-    final int padLen = (frames - 1) * hopLength + nFft;
-    final padded = Float32List(padLen);
-    padded.setRange(0, math.min(pcm.length, padLen), pcm);
-
-    // STFT with fftea
-    final freqBins = nFft ~/ 2 + 1;
-    final stftMag = Float32List(frames * freqBins);  // Magnitude squared
-
-    for (int f = 0; f < frames; f++) {
-      final start = f * hopLength;
-      final frame = Float32List(nFft);
-      for (int i = 0; i < nFft; i++) {
-        frame[i] = padded[start + i] * hann[i];
-      }
-
-      // fftea FFT
-      final real = Float32List.fromList(frame);  // Input real
-      final imag = Float32List((nFft / 2 + 1) as int); imag.fillRange(0, imag.length, 0.0);  // Imag zero
-      final complex = fftea.Complex(real, imag);
-      fftea.fft(complex);
-
-      // Magnitude squared
-      for (int k = 0; k < freqBins; k++) {
-        final mag = math.sqrt(complex.real[k] * complex.real[k] + complex.imag[k] * complex.imag[k]);
-        stftMag[f * freqBins + k] = mag * mag;
-      }
-    }
-
-    // Apply Mel filterbank
-    final melBasis = Float32List.fromList(melBasis);  // From generated file
-    final melSpec = Float32List(nMels * frames);
-
-    for (int m = 0; m < nMels; m++) {
-      for (int t = 0; t < frames; t++) {
-        double sum = 0.0;
-        for (int k = 0; k < freqBins; k++) {
-          sum += melBasis[m * freqBins + k] * stftMag[t * freqBins + k];
-        }
-        melSpec[m * frames + t] = sum > 0 ? math.log(sum + 1e-10) : -23.0;  // Log scale
-      }
-    }
-
-    return melSpec;
-  }
-
-  Future<void> _classifyAudio() async {
-    if (_interpreter == null) return;
-
-    // setState(() => _result = 'Recording…');
-
-    final pcm = await _recordAudio();
-    if (pcm == null) {
-      // setState(() => _result = 'Recording failed');
-      printLog(message: 'Recording Failed');
-      return;
-    }
-
-    final melSpec = _windowToMelSpec(pcm); // <-- 128 × time
-
-    // Determine time dimension from training (you printed it in Colab)
-    // Example: for 4 s @ 22050 Hz, hop = 256 → ~345 frames
-    final int timeSteps = melSpec.length ~/ _nMels;
-    final input = melSpec.reshape([1, _nMels, timeSteps, 1]);
-
-    // final outputShape = [1, _labels!.length];
-    final output = List.filled(1, Float32List(kRespiratoryLabels.length));
-
-    _interpreter!.run(input, output);
-
-    final scores = output[0];
-    final int predIdx = scores.indexOf(scores.reduce(math.max));
-    // setState(() => _result = _labels![predIdx]);
-    printLog(message: kRespiratoryLabels[predIdx]);
   }
 
   Future<void> shareReport() async {
@@ -324,7 +237,7 @@ class _ShishuVaniScreenState extends State<ShishuVaniScreen> with SingleTickerPr
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Shishu Vani", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 22) // Bolder, larger title
+        title: Text("ShishuVani-AI Stethoscope", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 22) // Bolder, larger title
             ),
         actions: const [
           Padding(
@@ -374,12 +287,12 @@ class _ShishuVaniScreenState extends State<ShishuVaniScreen> with SingleTickerPr
                                 size: 100, color: Colors.white), // Icon color white for ShaderMask
                           ),
                           const SizedBox(height: 25),
-                          Text(isRecording ? "Recording in progress..." : "Ready for auscultation",
+                          Text(isRecording ? "Recording in progress..." : "Ready for Recording",
                               style:
                                   TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: AppColors.textColorPrimary)),
                           const SizedBox(height: 35),
                           ElevatedButton.icon(
-                            onPressed: isRecording ? null : _classifyAudio,
+                            onPressed: isRecording ? null : _recordAudio,
                             icon: Icon(isRecording ? Icons.stop_circle_outlined : Icons.play_circle_filled,
                                 size: 32, color: AppColors.cardColor),
                             label: Text(isRecording ? "ANALYZING..." : "START 15s RECORDING",
